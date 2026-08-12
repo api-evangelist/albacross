@@ -1,0 +1,121 @@
+generated: '2026-08-12'
+method: searched
+source: https://docs.albacross.com/authentication
+derived_from:
+- openapi/albacross-reveal-openapi.yml
+- live probes of api.albacross.com and reveal.api.albacross.com on 2026-08-12
+summary: >
+  Albacross exposes a deliberately small, read-only HTTP surface. Every public data operation is a
+  single GET with the lookup key in the path, authenticated by a static API key in the Authorization
+  header using a custom "Api-Key <key>" scheme. There is no request body anywhere in the public
+  surface, no pagination, no filtering or expansion, no versioning in the path or a header, and no
+  idempotency contract — because there is nothing non-idempotent to protect. Responses are plain
+  JSON objects, not envelopes; errors ARE enveloped, in a non-standard {infos, errors} shape.
+authentication:
+  style: api-key-header
+  header: Authorization
+  format: 'Api-Key <YOUR_API_KEY>'
+  bearer: false
+  note: >
+    A custom scheme token ("Api-Key"), not RFC 6750 Bearer and not RFC 7617 Basic. The published
+    OpenAPI declares it only as `type: apiKey, in: header, name: Authorization` and does not record
+    the "Api-Key " prefix, so the spec alone is not sufficient to construct a working request — the
+    prefix is only visible in the docs code samples and in the company's own n8n credential source.
+  key_provisioning: >
+    Not self-serve. Keys are issued by an account manager / the Albacross dashboard on the
+    Organisation plan; the n8n key is generated under Settings → Integrations → n8n.
+  see: authentication/albacross-authentication.yml
+idempotency:
+  supported: false
+  key_header: null
+  note: >
+    No idempotency contract is published, and none is needed for the public surface: every public
+    operation (Reveal, Enrich, and the n8n GET reads) is a safe GET and therefore naturally
+    idempotent. The write operations that do exist — POST /n8n/hooks, PATCH /n8n/hooks/{id},
+    DELETE /n8n/hooks/{id} — carry no Idempotency-Key header in the company's own n8n client, so a
+    retried hook registration would create a duplicate hook. No `Idempotency` pointer is emitted in
+    apis.yml, because Albacross genuinely has no idempotency-key contract to point at.
+pagination:
+  supported: false
+  note: >
+    No public operation returns a collection. Reveal and Enrich each return a single Company object
+    or 204. The n8n list operations (GET /n8n/segments, GET /n8n/buyer_personas) return unpaginated
+    arrays of {id, name} in the company's own client, with no cursor, limit or offset parameter.
+field_expansion:
+  supported: false
+  note: >
+    No expand/fields/include parameter. The Company object is returned whole; sub-objects
+    (address, employees, financial_report, nace_code, linkedin_industry_code) are always inline.
+    The n8n webhook registration payload is the only place a consumer shapes the response, via a
+    contacts{} block (limit, with_emails, with_phone_numbers, keywords, country_filter_type).
+metadata:
+  supported: false
+  note: No customer-defined metadata field on any resource.
+request_tracing:
+  supported: true
+  headers:
+  - name: x-request-id
+    host: api.albacross.com
+    note: 'Returned by the Express edge on every response. Example observed 2026-08-12: 0a51c167-9eba-419f-bf9a-e29d61ffc931'
+  - name: apigw-requestid
+    host: reveal.api.albacross.com
+    note: AWS API Gateway request id. Confirms the two hosts sit behind different infrastructure.
+  client_supplied: false
+  note: >
+    Response-only. There is no documented inbound correlation header a client can set, and neither
+    id is mentioned in the documentation — a consumer would only find them by reading the response
+    headers. Quote whichever id is present when contacting support@albacross.com.
+versioning:
+  scheme: none
+  current: null
+  in_path: false
+  in_header: false
+  note: >
+    No version segment appears in any documented path (/reveal/company/{ip}, /enrich/companies/{domain},
+    /n8n/*), no Accept-version or API-Version header is documented, and no version negotiation exists.
+    The published OpenAPI carries info.version '1.0' but that version is not addressable at runtime.
+    See lifecycle/albacross-lifecycle.yml.
+error_envelope:
+  format: proprietary
+  rfc9457: false
+  content_type: application/json
+  shape:
+    infos: array of informational strings
+    errors: array of human-readable error strings
+  example: '{"infos":[],"errors":["Authentication required - please provide a valid API key"]}'
+  note: >
+    Observed live on all three hosts 2026-08-12. Machine-hostile: the array carries free-text English
+    prose with no stable error code, no type URI and no field pointer, so a client must string-match
+    to branch. The published OpenAPI's ErrorMessage schema declares a single `message` string
+    property, which does NOT match the envelope the API actually returns — a real spec/runtime
+    divergence. See errors/albacross-problem-types.yml.
+rate_limit_signaling:
+  headers: []
+  note: >
+    None. No X-RateLimit-*, RateLimit-* or Retry-After header on any observed response. Exhaustion
+    surfaces only as a bare 429. See rate-limits/albacross-rate-limits.yml.
+content_negotiation:
+  request_content_types: []
+  response_content_types: [application/json]
+  note: All public operations are GETs with no request body.
+empty_result_convention:
+  status: 204
+  note: >
+    A valid input with no match returns 204 No Content, NOT 200 with a null body and not 404.
+    This is the single most important convention for a client to handle: 204 means "we understood
+    your IP/domain and have no company for it", while 404 would mean a wrong path.
+security_headers:
+  observed:
+  - x-frame-options: DENY
+  - x-content-type-options: nosniff
+  - x-xss-protection: '1; mode=block'
+  - x-permitted-cross-domain-policies: master-only
+  - referrer-policy: 'origin-when-cross-origin, strict-origin-when-cross-origin'
+  note: Consistent across api.albacross.com and reveal.api.albacross.com.
+cross_links:
+  errors: errors/albacross-problem-types.yml
+  lifecycle: lifecycle/albacross-lifecycle.yml
+  authentication: authentication/albacross-authentication.yml
+  rate_limits: rate-limits/albacross-rate-limits.yml
+  webhooks: asyncapi/albacross-webhooks.yml
+  data_model: data-model/albacross-data-model.yml

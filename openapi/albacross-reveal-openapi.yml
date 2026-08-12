@@ -1,0 +1,210 @@
+# Resolved bundle of the Albacross-published Reveal API OpenAPI.
+# Source: https://reveal.api.albacross.com/public/albacross_reveal_api.yml
+#   + https://reveal.api.albacross.com/public/swagger-ui/common_components.yml
+# Only external $refs were inlined; no content was added, removed or invented.
+# x-apievangelist-method: derived
+openapi: 3.0.3
+info:
+  title: Reveal API docs
+  description: 'Reveal API allows you to get detailed information about a company based on one of its
+    IPv4 addresses.</br></br> Information may contain details like: a company name, address, URL, number
+    of employees and many more.</br> All of it is presented in a JSON format - a readable, self-explanatory
+    and widely adopted industry standard.</br></br> Our automated algorithms and multiple data sources
+    continuously work on improving the quality of our data</br> by making sure that available information
+    is as detailed and as up-to-date as possible.</br> At the same time every day, we''re increasing the
+    range of covered addresses out of the existing IP address pool.</br></br> If, however, you are not
+    able to find a company for a given IP or another error occurs (not likely, but possible),</br> our
+    API will provide you with a detailed, standardised error message and an appropriate HTTP return status
+    code.</br></br> Please bear in mind that at the moment IPv6 addresses are not supported yet but works
+    are ongoing to add those in the future.
+
+    '
+  version: '1.0'
+servers:
+- url: https://reveal.api.albacross.com
+  description: Production data
+- url: https://reveal.api.albakaos.com
+  description: Staging data
+externalDocs:
+  url: /public/postman_collection.json
+  description: Download preconfigured Postman collection
+paths:
+  /company/{ip_v4}:
+    get:
+      summary: Retrieve company based on its IPv4 address
+      description: Retrieve company based on its IPv4 address
+      parameters:
+      - name: ip_v4
+        in: path
+        description: Company IPv4 address
+        required: true
+        schema:
+          type: string
+          format: ipv4
+      responses:
+        '200':
+          description: Company details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '204':
+          description: Company not found for given IP
+        '400':
+          description: Wrong/unsupported IP format
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ErrorMessageWrongFormat'
+                - $ref: '#/components/schemas/ErrorMessageUnsupportedIPv6'
+        '401':
+          description: Invalid API Key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: '''Requests quota''/''Identfied quota'' has been exceeded - please contact Albacross'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Unknown error has appeared - please contact Albacross
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  schemas:
+    Company:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Albacross
+        country:
+          type: string
+          example: SE
+        url:
+          type: string
+          example: albacross.com
+        number:
+          type: string
+          example: SE123282543
+        description:
+          type: string
+          example: Welcome to Albacross!
+        founded_year:
+          type: integer
+          example: '2013'
+        address:
+          type: object
+          properties:
+            address:
+              type: string
+              example: Kungsgatan 26
+            city:
+              type: string
+              example: Stockholm
+            state:
+              type: string
+              example: Stockholms Lan
+            zip_code:
+              type: string
+              example: '19587'
+        linkedin_url:
+          type: string
+          example: https://www.linkedin.com/company/albacross
+        employees:
+          type: object
+          properties:
+            from:
+              type: integer
+              example: 11
+            to:
+              type: integer
+              example: 50
+            range:
+              type: string
+              example: 11-50
+          required:
+          - from
+          - to
+        financial_report:
+          type: object
+          properties:
+            from:
+              type: integer
+              example: 10000001
+            to:
+              type: integer
+              example: 50000000
+            currency:
+              type: string
+              example: EUR
+            range:
+              type: string
+              example: 10000001-50000000
+          required:
+          - from
+          - to
+          - currency
+        nace_code:
+          type: object
+          properties:
+            code:
+              type: string
+              example: '73'
+            category:
+              type: string
+              example: Advertising and market research
+          required:
+          - code
+          - category
+        linkedin_industry_code:
+          type: object
+          properties:
+            code:
+              type: string
+              example: '80'
+            category:
+              type: string
+              example: Marketing And Advertising
+          required:
+          - code
+          - category
+      required:
+      - name
+      - country
+    ErrorMessageWrongFormat:
+      description: 'Wrong IP format - only decimal IPv4 format is supported. Ex: 23.45.67.89'
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+      - message
+    ErrorMessageUnsupportedIPv6:
+      description: 'Unsupported IPv6 format - only decimal IPv4 format is supported. Ex: 23.45.67.89'
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+      - message
+    ErrorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+      - message
+security:
+- ApiKeyAuth: []

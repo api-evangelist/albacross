@@ -1,0 +1,51 @@
+generated: '2026-08-12'
+method: searched
+source: https://www.albacross.com/data-api
+secondary_sources:
+- https://docs.albacross.com/reveal
+- https://reveal.api.albacross.com/public/albacross_reveal_api.yml
+limit_count: 0
+note: >
+  Albacross publishes NO numeric rate limit for any of its APIs. The /data-api page states only
+  that "rate limits are customized based on use case and expected volume", and the developer
+  documentation's error table says a 429 means "You have exceeded your request quota. Contact
+  support@albacross.com to increase your limit." The limit is therefore a per-contract quota
+  negotiated with sales, not a published, self-serve number an agent could plan against.
+  limit_count is an honest 0: exhaustion behaviour is documented, the threshold is not.
+limits: []
+quota_model:
+  type: contract-negotiated
+  documented_dimensions:
+  - name: Requests quota
+    source: OpenAPI 429 description — "'Requests quota'/'Identfied quota' has been exceeded - please contact Albacross"
+    limit: null
+  - name: Identified quota
+    source: OpenAPI 429 description (same string)
+    limit: null
+  - name: Identified companies per month
+    source: https://www.albacross.com/pricing
+    note: >
+      The product plan quota (100 / 500 / 5000+ identified companies per month) is published and
+      is the closest thing to a documented ceiling, but it governs platform identification volume,
+      not API call rate.
+exhaustion:
+  status_code: 429
+  reason: Too Many Requests
+  documented_message: You have exceeded your request quota. Contact support@albacross.com to increase your limit.
+  remediation: Contact support@albacross.com or your account manager to raise the quota.
+  retry_after_header: false
+response_headers:
+  published: []
+  observed: []
+  note: >
+    Probed live on 2026-08-12. Neither https://api.albacross.com/reveal/company/62.63.238.18 (401)
+    nor https://api.albacross.com/enrich/companies/example.com (403) nor
+    https://reveal.api.albacross.com/company/62.63.238.18 (401) returns any X-RateLimit-*,
+    RateLimit-* or Retry-After header. The only runtime signal on the responses is x-request-id
+    (present on api.albacross.com, Express) / apigw-requestid (on reveal.api.albacross.com, AWS
+    API Gateway). An agent gets NO advance rate-limit signal from this API — it can only observe
+    the 429 after the fact, and the 429 carries no Retry-After to back off against.
+x-evidence:
+- {url: 'https://api.albacross.com/reveal/company/62.63.238.18', status: 401, checked: '2026-08-12', ratelimit_headers: none}
+- {url: 'https://api.albacross.com/enrich/companies/example.com', status: 403, checked: '2026-08-12', ratelimit_headers: none}
+- {url: 'https://reveal.api.albacross.com/company/62.63.238.18', status: 401, checked: '2026-08-12', ratelimit_headers: none}

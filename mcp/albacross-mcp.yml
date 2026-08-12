@@ -1,0 +1,47 @@
+generated: '2026-08-12'
+method: derived
+status: candidate
+source: openapi/albacross-reveal-openapi.yml + https://docs.albacross.com/
+published: false
+note: >
+  Albacross operates NO MCP server. Searched the docs, the GitHub organisation, npm and the MCP
+  registries, and probed https://mcp.albacross.com/ (does not resolve),
+  https://api.albacross.com/mcp (404) and https://albacross.com/mcp (404) on 2026-08-12.
+  The tools below are a CANDIDATE surface derived from operations Albacross documents — a design
+  proposal for what an Albacross MCP server would expose, not a server that exists. NO `MCPServer`
+  pointer is emitted in apis.yml, because the pointer would assert that Albacross serves an MCP
+  endpoint, and it does not. No tool crosswalk is emitted either: a crosswalk binds real MCP tools
+  to real OpenAPI operations, and there are no real MCP tools here to bind.
+server:
+  name: albacross
+  transport: null
+  url: null
+probes:
+- {url: 'https://mcp.albacross.com/', result: NXDOMAIN}
+- {url: 'https://api.albacross.com/mcp', status: 404}
+- {url: 'https://albacross.com/mcp', status: 404}
+candidate_tools:
+- name: reveal_company_by_ip
+  description: Resolve an IPv4 address to an Albacross firmographic company record.
+  source_operation: 'openapi/albacross-reveal-openapi.yml#/paths/~1company~1{ip_v4}/get'
+  input_schema_source: 'The ip_v4 path parameter (string, format ipv4) declared in the published OpenAPI.'
+  action_class: connected
+  consequence: read
+- name: enrich_company_by_domain
+  description: Resolve a website domain to the same Albacross firmographic company record.
+  source_operation: null
+  input_schema_source: 'https://docs.albacross.com/enrich — domain path parameter. No OpenAPI published, so no machine-readable input schema exists.'
+  action_class: connected
+  consequence: read
+- name: list_segments
+  description: List the account's saved segments.
+  source_operation: null
+  input_schema_source: 'github.com/albacross/n8n-nodes-albacross — GET /n8n/segments. No OpenAPI published.'
+  action_class: connected
+  consequence: read
+- name: list_buyer_personas
+  description: List the account's saved buyer personas.
+  source_operation: null
+  input_schema_source: 'github.com/albacross/n8n-nodes-albacross — GET /n8n/buyer_personas. No OpenAPI published.'
+  action_class: connected
+  consequence: read

@@ -1,0 +1,24 @@
+generated: '2026-08-12'
+method: generated
+source: >
+  openapi/albacross-reveal-openapi.yml, https://docs.albacross.com/, and Albacross's MIT-licensed
+  github.com/albacross/n8n-nodes-albacross. No provider-published Agent Skills or AGENTS.md exist
+  — searched albacross.com, docs.albacross.com, help.albacross.com and the GitHub organisation.
+note: >
+  Three skills covering the whole Albacross developer surface: the two lookup APIs and the event
+  surface. Every path, header, status code and request field is provider-published and cited in
+  each skill's `grounding` field. The Reveal OpenAPI declares no operationIds, so skills reference
+  verbatim method+path rather than an invented identifier.
+skills:
+- file: albacross-reveal-ip-to-company.md
+  name: Reveal a company from an IPv4 address
+  api: openapi/albacross-reveal-openapi.yml
+  operations: ['GET /company/{ip_v4}']
+- file: albacross-enrich-domain-to-company.md
+  name: Enrich a company from a website domain
+  api: null
+  operations: ['GET /enrich/companies/{domain}']
+- file: albacross-register-lead-webhook.md
+  name: Register a lead webhook and receive identified companies
+  api: null
+  operations: ['GET /n8n/me', 'GET /n8n/segments', 'GET /n8n/buyer_personas', 'POST /n8n/hooks', 'PATCH /n8n/hooks/{id}', 'DELETE /n8n/hooks/{id}']

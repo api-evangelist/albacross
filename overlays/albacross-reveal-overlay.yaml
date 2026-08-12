@@ -1,0 +1,70 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Albacross Reveal API
+  version: 1.0.0
+extends: openapi/albacross-reveal-openapi.yml
+x-apievangelist:
+  generated: '2026-08-12'
+  method: generated
+  source: openapi/albacross-reveal-openapi.yml
+  note: >
+    Captures API Evangelist's enhancements to the Albacross-published Reveal API OpenAPI without
+    mutating the harvested original at openapi/_original/. Every action below records something
+    the published spec omits and that was verified against Albacross's own documentation or a live
+    probe — an operationId (the spec declares none, so no generated client can name the method),
+    a tag (the spec declares none), the "Api-Key " prefix the securityScheme omits, the real
+    error envelope the spec contradicts, and the second live host the current developer portal
+    documents. None of it invents behaviour; all of it is provider-published fact the spec left out.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-profile: https://apis.io/provider/albacross
+    x-apievangelist-reviewed: '2026-08-12'
+    x-api-evangelist-notes: >
+      Single-operation read API. Errors returned at runtime do NOT match the ErrorMessage schema
+      declared in this document — see errors/albacross-problem-types.yml.
+- target: $.servers
+  update:
+    x-apievangelist-host-divergence: >
+      This document declares reveal.api.albacross.com (AWS API Gateway) as production. The current
+      developer portal at docs.albacross.com documents the same capability at
+      https://api.albacross.com/reveal/company/{ip_address} (nginx/Express). Both hosts answered
+      live on 2026-08-12 and returned the same 401 envelope. Albacross has published no statement
+      of which is canonical, and no deprecation notice for either.
+- target: $.paths['/company/{ip_v4}'].get
+  update:
+    operationId: revealCompanyByIp
+    tags:
+    - Reveal
+    x-apievangelist-operationid-note: >
+      The published document declares no operationId for its only operation, so every generated
+      client names the method from the path. revealCompanyByIp is API Evangelist's addition, not
+      an Albacross-published identifier.
+    x-apievangelist-alternate-path: /reveal/company/{ip_address}
+    x-apievangelist-empty-result: >
+      204 No Content is the documented "no company matched" result. It is not an error and must
+      not be retried.
+- target: $.components.securitySchemes.ApiKeyAuth
+  update:
+    x-apievangelist-value-prefix: 'Api-Key '
+    x-apievangelist-note: >
+      The declared scheme (apiKey in header, name Authorization) is not sufficient to build a
+      working request. Albacross's own documentation and its MIT-licensed n8n credential both send
+      `Authorization: Api-Key <key>`. A client that sends the bare key, or a Bearer prefix, gets 401.
+    x-apievangelist-key-provisioning: >
+      Not self-serve. API access is an Organisation-plan feature marked "available upon request";
+      keys are issued via an account manager.
+- target: $.components.schemas.ErrorMessage
+  update:
+    x-apievangelist-runtime-divergence: >
+      Observed live on 2026-08-12, every Albacross error host returns
+      {"infos":[],"errors":["<prose>"]} — not the single `message` property declared here. Clients
+      generated from this schema will fail to deserialize real error responses.
+- target: $.components.schemas.Company
+  update:
+    x-apievangelist-note: >
+      Same object is returned by the undocumented-in-OpenAPI Enrich API at
+      https://api.albacross.com/enrich/companies/{domain}. See data-model/albacross-data-model.yml.
+    x-apievangelist-no-identifier: >
+      No Albacross-issued id on this object; `url` (the domain) is the only viable join key and is
+      not declared required or unique.

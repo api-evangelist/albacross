@@ -1,0 +1,82 @@
+generated: '2026-08-12'
+method: searched
+source: https://docs.albacross.com/
+probed: '2026-08-12'
+versioning:
+  scheme: none
+  current: null
+  spec_version: '1.0'
+  docs: https://docs.albacross.com/
+  note: >
+    No runtime versioning. No version segment in any documented path, no version header, no version
+    negotiation. The published Reveal OpenAPI carries info.version '1.0' but that string is not
+    addressable and has no dated release behind it. A breaking change to the Company object would
+    reach every consumer at once with no opt-out.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  note: >
+    No deprecation policy is published anywhere on albacross.com, docs.albacross.com or
+    help.albacross.com, and no Sunset or Deprecation response header was observed on any live
+    probe. Albacross does have a live deprecation in flight and has documented it nowhere: the
+    published Reveal OpenAPI declares its production server as reveal.api.albacross.com, while the
+    current developer portal documents the same capability at api.albacross.com/reveal/company/{ip}.
+    Both hosts answer, on different infrastructure (AWS API Gateway vs an Express/nginx edge), with
+    no statement of which is canonical or when the older one stops.
+  no_pointer_reason: >
+    No `Deprecation` pointer is emitted in apis.yml — Albacross publishes no deprecation policy
+    page to point at. Recording the absence is the finding.
+sla:
+  url: null
+  uptime_target: null
+  published: false
+  note: No public SLA or uptime commitment. Enterprise terms are quote-only via sales.
+status_page:
+  url: null
+  published: false
+  probed:
+  - {url: 'https://status.albacross.com/', result: NXDOMAIN}
+  - {url: 'https://albacross.com/status', status: 404}
+  note: >
+    Albacross operates no public status page. status.albacross.com does not resolve. There is no
+    incident history, no uptime dashboard and no subscribe-to-incidents channel for a consumer of
+    the Reveal or Enrich API.
+  no_pointer_reason: >
+    No `StatusPage` pointer is emitted in apis.yml — there is no status page to point at.
+changelog:
+  url: null
+  published: false
+  note: >
+    No dated API changelog. albacross.com/changelog is a 404. The Newsroom
+    (https://www.albacross.com/newsroom) is a marketing blog, not a release log, and carries no
+    dated API change entries. The closest thing to a release record is the git history of
+    github.com/albacross/n8n-nodes-albacross. No `ChangeLog` pointer is emitted.
+deprecated_operations: []
+host_sprawl:
+  note: >
+    The Albacross-published Reveal OpenAPI declares TWO servers, and both are live and reachable
+    from the public internet. The second, https://reveal.api.albakaos.com, is labelled "Staging
+    data" in the spec — a staging environment on a separate registrable domain (albakaos.com),
+    published in a public specification document and answering the same 401 auth envelope as
+    production when probed anonymously on 2026-08-12. Combined with the third, documentation-only
+    host (api.albacross.com), Albacross exposes the same Reveal capability on three live hosts
+    across two domains with no published statement of which is canonical, which is deprecated, or
+    which is not intended for public traffic.
+  hosts:
+  - {host: 'https://reveal.api.albacross.com', role: production (per published OpenAPI), status: 401, live: true}
+  - {host: 'https://reveal.api.albakaos.com', role: staging (per published OpenAPI), status: 401, live: true}
+  - {host: 'https://api.albacross.com/reveal', role: documented on the current developer portal, status: 401, live: true}
+  checked: '2026-08-12'
+
+surface_decay:
+  note: >
+    Read alongside packages/albacross-packages.yml. Three of the four repositories in the Albacross
+    GitHub organisation have not been pushed since 2020 (gtm-reveal, gtm-tracking) or 2018
+    (joomla_plugin). Only n8n-nodes-albacross is current (pushed 2026-06-04). The published Reveal
+    OpenAPI has no dated version to age against.
+support:
+  channel: https://help.albacross.com/
+  email: support@albacross.com

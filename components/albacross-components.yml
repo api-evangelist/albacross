@@ -1,0 +1,73 @@
+generated: '2026-08-12'
+method: searched
+source: https://albacross.com/llms.txt
+secondary_sources:
+- https://github.com/albacross/gtm-reveal
+- https://github.com/albacross/gtm-tracking
+- https://www.albacross.com/chrome-plugin
+- https://serve.albacross.com/track.js
+summary: >
+  Albacross's client-side surface is a tracking pixel, not a UI component library. There is no
+  embeddable widget, web component, element library or hosted prebuilt view. What Albacross ships
+  to the browser is a single JavaScript tracker that identifies the visitor's IP, plus two Google
+  Tag Manager templates that wrap it, a Chrome extension for the operator (not the visitor), and
+  a Joomla plugin. All four are the collection side of the product, not a rendering surface.
+families:
+- name: Tracking script
+  kind: script-tag
+  official: true
+  components:
+  - name: Albacross tracking script
+    loader: https://serve.albacross.com/track.js
+    status: live
+    http_status: 200
+    content_type: application/javascript
+    versioned: false
+    note: >
+      Unpinned URL — no version segment, so the deployed build floats. Installed as a script tag
+      with the account's Albacross ID. This is the component that produces the identification
+      events the Reveal API and the webhooks are built on.
+- name: Tag manager templates
+  kind: gtm-custom-template
+  official: true
+  components:
+  - name: GTM Reveal Script template
+    repo: https://github.com/albacross/gtm-reveal
+    files: [template.tpl, metadata.yaml]
+    last_pushed: '2020-06-01'
+    status: dormant
+  - name: GTM Tracking Script template
+    repo: https://github.com/albacross/gtm-tracking
+    files: [template.tpl, metadata.yaml]
+    last_pushed: '2020-06-01'
+    status: dormant
+  note: >
+    Both templates are published from Albacross's own GitHub organisation and neither has been
+    touched since June 2020.
+- name: CMS plugins
+  kind: server-side-plugin
+  official: true
+  components:
+  - name: Joomla plugin
+    repo: https://github.com/albacross/joomla_plugin
+    language: PHP
+    last_pushed: '2018-07-05'
+    status: dormant
+    registry: none
+    note: Never published to Packagist; eight years without a push.
+- name: Operator tooling
+  kind: browser-extension
+  official: true
+  components:
+  - name: Albacross Chrome extension (LinkedIn Contact Finder)
+    url: https://www.albacross.com/chrome-plugin
+    status: live
+    note: >
+      Cross-verifies contacts across 30+ data providers from LinkedIn. A seat-holder tool for the
+      Albacross operator, not an embeddable component a developer integrates into their own app.
+      Bundled from the Starter plan.
+ui_components:
+  published: false
+  note: >
+    No web components, no element/JS library, no hosted checkout or embedded dashboard, no iframe
+    embed. Nothing in the Albacross surface renders UI inside a customer application.

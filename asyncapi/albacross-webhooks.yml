@@ -1,0 +1,114 @@
+generated: '2026-08-12'
+method: searched
+source: https://help.albacross.com/en/articles/3116448-integrating-with-webhooks
+secondary_sources:
+- https://help.albacross.com/en/articles/3306905-what-are-webhooks
+- https://github.com/albacross/n8n-nodes-albacross
+- https://www.albacross.com/pricing
+spec_type: none
+asyncapi_published: false
+note: >
+  Albacross has a real, first-party outbound event surface — Workflow webhooks that POST an
+  identified-company lead to a customer-supplied URL in real time — but publishes NO AsyncAPI
+  document and no formal event schema for it. Nothing was fabricated: the catalog records the
+  webhook surface as documented, and leaves the message schema unresolved because Albacross has
+  not published one. The most precise public description of the registration contract is the
+  company's own MIT-licensed n8n node source, which is cited field-by-field below.
+event_surface:
+  style: outbound-webhook
+  transport: http
+  direction: albacross-to-consumer
+  configuration_ui: 'Albacross app → Workflows → New Workflow'
+  registration_api: https://api.albacross.com/n8n/hooks
+  entitlement: >
+    Organisation plan only, and marked "*Available upon request" on the pricing page — webhooks
+    are not a self-serve feature on Starter or Professional.
+triggers:
+- name: lead.identified
+  documented_as: A lead (company) visits your website and matches the Workflow's chosen Segment.
+  note: >
+    Names are descriptive, not published event-type strings — Albacross publishes no event-type
+    vocabulary. There is exactly one conceptual trigger; it is scoped by Segment and by send mode.
+  filters:
+    segment: Restrict to companies in a specific Albacross segment, or all companies.
+    send_mode:
+      new_only: Debounce so each company only triggers once.
+      new_and_returning: Fire for every qualifying event, including repeat visits.
+    conditions_flag: 'updates (boolean) — true for new_and_returning, false for new_only'
+delivery:
+  method: POST
+  target: customer-supplied URL
+  content_type: application/json
+  note: >
+    "You should start receiving data from your Webhooks Workflow to the URL you have specified."
+    Albacross documents multiple payload TEMPLATES and tells customers to contact support if they
+    need a new one, so the delivered shape is per-account configurable rather than a single
+    published contract.
+verification:
+  mechanism: shared-token
+  header: null
+  required: false
+  note: >
+    Albacross generates a token per webhook "to prove that traffic is coming from the Albacross
+    platform", and specifying it in the receiving system is explicitly OPTIONAL. The header or
+    body field carrying the token is not documented, and there is no HMAC signature scheme, no
+    timestamp, and no replay protection. A receiver cannot cryptographically verify an Albacross
+    webhook.
+retries:
+  documented: false
+  note: No retry, backoff, or dead-letter behaviour is documented.
+ordering:
+  documented: false
+delivery_guarantee:
+  documented: false
+payload:
+  schema_published: false
+  documented_contents:
+  - Company — the identified company record (see data-model/albacross-data-model.yml)
+  - Contacts — optional, when contact enrichment is enabled on the Workflow
+  - Event metadata
+  note: >
+    No field list, no JSON example and no schema is published in the help centre; the integration
+    guide shows the output format as a screenshot image only. The registration-side contact filter
+    is fully specified in the n8n node source and is recorded below because it is the only
+    machine-readable part of the contract Albacross publishes.
+registration_contract:
+  source: https://github.com/albacross/n8n-nodes-albacross/blob/main/nodes/AlbacrossTrigger/AlbacrossTrigger.node.ts
+  license: MIT
+  operations:
+  - {method: POST, path: /n8n/hooks, purpose: Register a webhook and start receiving lead events.}
+  - {method: PATCH, path: '/n8n/hooks/{id}', purpose: Patch only the fields that changed on an existing hook.}
+  - {method: DELETE, path: '/n8n/hooks/{id}', purpose: Deregister the webhook and stop delivery.}
+  - {method: GET, path: /n8n/segments, purpose: 'List the account''s segments as {id, name} for the segment filter.'}
+  - {method: GET, path: /n8n/buyer_personas, purpose: 'List the account''s buyer personas as {id, name}.'}
+  - {method: GET, path: /n8n/me, purpose: Verify an API key. Used as the credential test.}
+  request_body_fields:
+    webhook_url: {type: string, description: The consumer URL Albacross will POST lead events to.}
+    settings_page: {type: string, description: A URL back to the consumer-side settings page for this hook.}
+    segment_id: {type: integer, description: Restrict delivery to this Albacross segment.}
+    conditions: {type: object, description: '{updates: boolean} — true to include returning companies.'}
+    name: {type: string, description: Human-readable hook name shown in the Albacross UI.}
+    contacts: {type: object, nullable: true, description: Contact-enrichment shaping, or null to send company data only.}
+  contacts_object_fields:
+    limit: {type: integer, description: Max contacts returned per company.}
+    with_emails: {type: boolean, description: Require a verified email.}
+    with_phone_numbers: {type: boolean, description: Require a verified phone number.}
+    must_have_contacts: {type: boolean, description: Only deliver the lead if contacts were found.}
+    phone_number: {type: boolean, description: True when the requested contact type includes phone.}
+    keywords: {type: array, items: string, description: Manual job-title keywords used to select contacts.}
+    export_buyer_persona: {type: boolean, description: Use a saved buyer persona instead of manual keywords.}
+    buyer_persona_id: {type: integer, optional: true, description: The buyer persona to select contacts by.}
+    country_filter_type: {type: string, enum: [all, based_on_lead_country, selected], description: How to scope contact country.}
+    countries: {type: array, items: string, optional: true, description: Explicit country list when country_filter_type is selected.}
+  authentication: 'Authorization: Api-Key <key>'
+third_party_relays:
+  note: >
+    Albacross webhooks are widely consumed through automation platforms rather than directly.
+    Recorded for completeness; these are third-party listings, not Albacross artifacts.
+  platforms: [Zapier, Make, n8n, SureTriggers, Integrately, SyncSpider, Workload]
+gap:
+  summary: >
+    A real event surface with no machine-readable contract. To close it Albacross would need to
+    publish (1) an AsyncAPI 3.x document for the lead-identified channel, (2) the JSON payload
+    schema currently shown only as a screenshot, (3) the header name carrying the verification
+    token and an HMAC signature scheme, and (4) documented retry semantics.

@@ -1,0 +1,116 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/albacross-reveal-openapi.yml
+enriched_from:
+- https://docs.albacross.com/reveal
+- https://docs.albacross.com/enrich
+summary: >
+  Albacross has a single-entity public data model. Both public APIs — Reveal (by IPv4) and Enrich
+  (by domain) — are two lookup keys onto the same Company record. There are no cross-resource id
+  references, no foreign keys and no id-prefix scheme in the public surface, so the relationship
+  graph is shallow by design: Company owns four value objects, and the account-side objects the
+  n8n API exposes (Segment, BuyerPersona, Hook) never appear inside a Company.
+entities:
+- name: Company
+  description: A firmographic company record. The only entity returned by the public APIs.
+  identifier: none
+  note: >
+    The Company object carries NO stable Albacross id. `url` (the company domain) is the closest
+    thing to a natural key and is the Enrich API's lookup key, but it is not declared unique and is
+    not marked required — only `name` and `country` are required. A consumer cannot reliably
+    de-duplicate or join Albacross records without keying on the domain themselves.
+  lookup_keys:
+  - {key: ipv4, via: 'GET /reveal/company/{ip_v4}', note: 'IPv4 only; IPv6 explicitly unsupported.'}
+  - {key: domain, via: 'GET /enrich/companies/{domain}'}
+  fields:
+  - {name: name, type: string, required: true, example: Albacross}
+  - {name: country, type: string, required: true, example: SE, note: ISO 3166-1 alpha-2.}
+  - {name: url, type: string, required: false, example: albacross.com, note: Company domain. Also the Enrich lookup key.}
+  - {name: number, type: string, required: false, example: SE5569427338, note: National company registration number, country-prefixed.}
+  - {name: description, type: string, required: false}
+  - {name: founded_year, type: integer, required: false, example: 2014}
+  - {name: linkedin_url, type: string, required: false, example: 'https://www.linkedin.com/company/albacross'}
+  - {name: address, type: object, required: false, ref: Address}
+  - {name: employees, type: object, required: false, ref: EmployeeBand}
+  - {name: financial_report, type: object, required: false, ref: RevenueBand}
+  - {name: nace_code, type: object, required: false, ref: IndustryCode}
+  - {name: linkedin_industry_code, type: object, required: false, ref: IndustryCode}
+- name: Address
+  kind: value-object
+  owner: Company
+  fields:
+  - {name: address, type: string, example: 'Epicenter, Malmskillnadsgatan 44'}
+  - {name: city, type: string, example: Stockholm}
+  - {name: state, type: string, example: Stockholms Lan}
+  - {name: zip_code, type: string, example: '19587'}
+  note: No country field — country lives on Company. No geo coordinates.
+- name: EmployeeBand
+  kind: value-object
+  owner: Company
+  fields:
+  - {name: from, type: integer, required: true, example: 11}
+  - {name: to, type: integer, required: true, example: 50}
+  - {name: range, type: string, required: false, example: '11-50'}
+  note: >
+    Banded, never exact. `range` is a denormalised string of from/to — a client should parse
+    from/to and treat range as display only.
+- name: RevenueBand
+  kind: value-object
+  owner: Company
+  fields:
+  - {name: from, type: integer, required: true, example: 10000001}
+  - {name: to, type: integer, required: true, example: 50000000}
+  - {name: currency, type: string, required: true, example: EUR}
+  - {name: range, type: string, required: false, example: '10000001-50000000'}
+  note: >
+    Currency is per-record and is NOT normalised to a single reporting currency, so revenue bands
+    are not directly comparable across companies without an FX step. Named financial_report on
+    the wire.
+- name: IndustryCode
+  kind: value-object
+  owner: Company
+  used_by: [nace_code, linkedin_industry_code]
+  fields:
+  - {name: code, type: string, required: true}
+  - {name: category, type: string, required: true}
+  note: >
+    One shared shape, two independent taxonomies. nace_code carries the EU NACE Rev. 2 code
+    (e.g. 58.29 "Other software publishing"); linkedin_industry_code carries LinkedIn's own
+    industry id (e.g. 4 "Software Development"). The two disagree on the same company in
+    Albacross's own published examples — a consumer must pick a taxonomy, not merge them.
+- name: Segment
+  kind: account-object
+  surface: n8n API
+  source: 'GET /n8n/segments'
+  fields:
+  - {name: id, type: integer}
+  - {name: name, type: string}
+  note: A saved filter over identified companies. Scopes webhook delivery.
+- name: BuyerPersona
+  kind: account-object
+  surface: n8n API
+  source: 'GET /n8n/buyer_personas'
+  fields:
+  - {name: id, type: integer}
+  - {name: name, type: string}
+  note: A saved contact-targeting profile; an alternative to manual keyword selection.
+- name: Hook
+  kind: account-object
+  surface: n8n API
+  source: 'POST /n8n/hooks'
+  fields:
+  - {name: id, type: integer}
+  note: A registered webhook subscription. See asyncapi/albacross-webhooks.yml for its full body.
+relationships:
+- {from: Company, to: Address, kind: has_one, via: address}
+- {from: Company, to: EmployeeBand, kind: has_one, via: employees}
+- {from: Company, to: RevenueBand, kind: has_one, via: financial_report}
+- {from: Company, to: IndustryCode, kind: has_one, via: nace_code}
+- {from: Company, to: IndustryCode, kind: has_one, via: linkedin_industry_code}
+- {from: Hook, to: Segment, kind: belongs_to, via: segment_id}
+- {from: Hook, to: BuyerPersona, kind: belongs_to, via: buyer_persona_id, optional: true}
+id_prefixes: []
+observations:
+- No entity in the public surface carries an Albacross-issued identifier.
+- No collection endpoint exists, so no entity can be enumerated — only looked up by key.
+- Reveal and Enrich return the identical Company shape; they are one model behind two keys.

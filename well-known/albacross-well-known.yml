@@ -1,0 +1,69 @@
+generated: '2026-08-12'
+method: probed
+source: live GET of /.well-known/* on every Albacross host in apis.yml and the OpenAPI servers[]
+result: no-hit
+note: >
+  Albacross serves no /.well-known/ discovery surface. Every canonical path was probed on all six
+  hosts on 2026-08-12 and every one is either a real 404 or an SPA catch-all. IMPORTANT: the two
+  front-end hosts, docs.albacross.com (a Lovable-built React SPA) and app.albacross.com (the product
+  app), answer HTTP 200 with their index.html shell for EVERY /.well-known/* path — a 1,912-byte and
+  4,216-byte HTML document respectively, identical for /security.txt, /agent-card.json and every
+  other path. These are catch-all false positives, not documents, and are recorded as misses. No
+  WellKnown, SecurityTxt or AgentCard pointer is emitted in apis.yml as a result.
+hosts:
+- host: https://albacross.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://www.albacross.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://api.albacross.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://reveal.api.albacross.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://docs.albacross.com
+  spa_catch_all: true
+  documents:
+  - {path: /.well-known/security.txt, status: 200, document: false, content_type: text/html, note: SPA index.html shell (1912 bytes) — not a document}
+  - {path: /.well-known/openid-configuration, status: 200, document: false, content_type: text/html, note: SPA index.html shell — not a document}
+  - {path: /.well-known/oauth-authorization-server, status: 200, document: false, content_type: text/html, note: SPA index.html shell — not a document}
+  - {path: /.well-known/api-catalog, status: 200, document: false, content_type: text/html, note: SPA index.html shell — not a document}
+  - {path: /.well-known/ai-plugin.json, status: 200, document: false, content_type: text/html, note: SPA index.html shell — not a document}
+  - {path: /.well-known/agent-card.json, status: 200, document: false, content_type: text/html, note: SPA index.html shell — not an AgentCard}
+  - {path: /.well-known/agent.json, status: 200, document: false, content_type: text/html, note: SPA index.html shell — not an AgentCard}
+- host: https://app.albacross.com
+  spa_catch_all: true
+  documents:
+  - {path: /.well-known/security.txt, status: 200, document: false, content_type: text/html, note: SPA index.html shell (4216 bytes) — not a document}
+  - {path: /.well-known/openid-configuration, status: 200, document: false, content_type: text/html, note: SPA index.html shell — not a document}
+  - {path: /.well-known/oauth-authorization-server, status: 200, document: false, content_type: text/html, note: SPA index.html shell — not a document}
+  - {path: /.well-known/api-catalog, status: 200, document: false, content_type: text/html, note: SPA index.html shell — not a document}
+  - {path: /.well-known/ai-plugin.json, status: 200, document: false, content_type: text/html, note: SPA index.html shell — not a document}
+  - {path: /.well-known/agent-card.json, status: 200, document: false, content_type: text/html, note: SPA index.html shell — not an AgentCard}
+  - {path: /.well-known/agent.json, status: 200, document: false, content_type: text/html, note: SPA index.html shell — not an AgentCard}

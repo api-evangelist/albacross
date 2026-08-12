@@ -1,0 +1,27 @@
+generated: '2026-08-12'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: albacross.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 20 18:24:58 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: docs.albacross.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  8 23:59:59 2026 GMT
+  hsts: false
+- host: api.albacross.com
+  https: true
+  tls_version: TLSv1.2
+  cert_expires: Feb 16 23:59:59 2027 GMT
+  hsts: null
+domains:
+- domain: albacross.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine

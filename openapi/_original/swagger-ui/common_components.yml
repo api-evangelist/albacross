@@ -1,0 +1,118 @@
+openapi: 3.0.3
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  schemas:
+    Company:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Albacross"
+        country:
+          type: string
+          example: "SE"
+        url:
+          type: string
+          example: "albacross.com"
+        number:
+          type: string
+          example: "SE123282543"
+        description:
+          type: string
+          example: "Welcome to Albacross!"
+        founded_year:
+          type: integer
+          example: "2013"
+        address:
+          type: object
+          properties:
+            address:
+              type: string
+              example: "Kungsgatan 26"
+            city:
+              type: string
+              example: "Stockholm"
+            state:
+              type: string
+              example: "Stockholms Lan"
+            zip_code:
+              type: string
+              example: "19587"
+        linkedin_url:
+          type: string
+          example: "https://www.linkedin.com/company/albacross"
+        employees:
+          type: object
+          properties:
+            from:
+              type: integer
+              example: 11
+            to:
+              type: integer
+              example: 50
+            range:
+              type: string
+              example: "11-50"
+          required:
+            - from
+            - to
+        financial_report:
+          type: object
+          properties:
+            from:
+              type: integer
+              example: 10000001
+            to:
+              type: integer
+              example: 50000000
+            currency:
+              type: string
+              example: "EUR"
+            range:
+              type: string
+              example: "10000001-50000000"
+          required:
+            - from
+            - to
+            - currency
+        nace_code:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "73"
+            category:
+              type: string
+              example: "Advertising and market research"
+          required:
+            - code
+            - category
+        linkedin_industry_code:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "80"
+            category:
+              type: string
+              example: "Marketing And Advertising"
+          required:
+            - code
+            - category
+      required:
+        - name
+        - country
+    ErrorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+security:
+  - ApiKeyAuth: []

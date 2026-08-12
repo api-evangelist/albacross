@@ -1,0 +1,89 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/albacross-reveal-openapi.yml
+enriched_from:
+- https://docs.albacross.com/reveal
+- https://docs.albacross.com/enrich
+- live unauthenticated probes of api.albacross.com and reveal.api.albacross.com on 2026-08-12
+format: proprietary
+rfc9457: false
+envelope:
+  content_type: application/json
+  schema:
+    infos: {type: array, items: string, description: Informational messages; empty in every observed response.}
+    errors: {type: array, items: string, description: Human-readable English error strings. No stable code, no type URI, no field pointer.}
+  example: '{"infos":[],"errors":["Authentication required - please provide a valid API key"]}'
+  note: >
+    The runtime envelope does NOT match the published OpenAPI. The spec's ErrorMessage schema
+    declares a single required `message` string; every live error response returns
+    {"infos":[...],"errors":[...]} instead. A generated client built from the spec would fail to
+    parse the real error body. This divergence is recorded, not corrected — the spec is Albacross's
+    to fix.
+machine_readability:
+  stable_error_codes: false
+  type_uris: false
+  field_pointers: false
+  note: >
+    Branching on an Albacross error requires string-matching English prose. Two different auth
+    failures on two different endpoints return two different strings ("Authentication required -
+    please provide a valid API key" vs "No authorization header") under two different status codes
+    (401 vs 403) for what is the same underlying condition — a missing key.
+problems:
+- status: 204
+  title: No match
+  description: Valid input, but no company matched. Not an error — a documented empty result.
+  applies_to: [reveal, enrich]
+  body: none
+  source_operation: openapi/albacross-reveal-openapi.yml#/paths/~1company~1{ip_v4}/get
+  remediation: Treat as a negative lookup result, not a failure. Do not retry.
+- status: 400
+  title: Bad Request — invalid input format
+  applies_to: [reveal, enrich]
+  variants:
+  - schema: ErrorMessageWrongFormat
+    description: 'Wrong IP format - only decimal IPv4 format is supported. Ex: 23.45.67.89'
+  - schema: ErrorMessageUnsupportedIPv6
+    description: 'Unsupported IPv6 format - only decimal IPv4 format is supported. Ex: 23.45.67.89'
+  - description: Invalid domain format (Enrich API)
+  source_operation: openapi/albacross-reveal-openapi.yml#/paths/~1company~1{ip_v4}/get
+  remediation: >
+    Validate the IPv4 address (dotted decimal) or domain before calling. IPv6 is not supported —
+    the /data-api page lists it as roadmap only. Do not retry without changing the input.
+- status: 401
+  title: Unauthorized — missing or invalid API key
+  description: The API key is missing or invalid. Ensure you include a valid key in the Authorization header.
+  observed_message: Authentication required - please provide a valid API key
+  observed_on:
+  - 'https://api.albacross.com/reveal/company/{ip}'
+  - 'https://reveal.api.albacross.com/company/{ip}'
+  - 'https://api.albacross.com/n8n/me'
+  source_operation: openapi/albacross-reveal-openapi.yml#/paths/~1company~1{ip_v4}/get
+  remediation: 'Send the header `Authorization: Api-Key <key>`. Do not retry with the same credential.'
+- status: 403
+  title: Forbidden — insufficient permissions
+  description: Your API key does not have permission to access this endpoint or resource.
+  observed_message: No authorization header
+  observed_on:
+  - 'https://api.albacross.com/enrich/companies/{domain}'
+  remediation: >
+    Confirm the key is entitled to the endpoint. Note the inconsistency: the Enrich endpoint
+    returns 403 "No authorization header" where Reveal returns 401 "Authentication required" for
+    the identical anonymous request. Handle both as an auth failure.
+- status: 429
+  title: Too Many Requests — quota exceeded
+  description: >
+    "'Requests quota'/'Identfied quota' has been exceeded - please contact Albacross" (OpenAPI, sic —
+    'Identfied' is misspelled in the published spec). Docs phrasing: "You have exceeded your request
+    quota. Contact support@albacross.com to increase your limit."
+  source_operation: openapi/albacross-reveal-openapi.yml#/paths/~1company~1{ip_v4}/get
+  retry_after: false
+  remediation: >
+    No Retry-After header is returned, so a client has nothing to back off against. Contact
+    support@albacross.com or the account manager to raise the quota. Apply client-side exponential
+    backoff.
+- status: 500
+  title: Internal Server Error
+  description: Unknown error has appeared - please contact Albacross. Retry the request or contact support if it persists.
+  source_operation: openapi/albacross-reveal-openapi.yml#/paths/~1company~1{ip_v4}/get
+  remediation: Retry with backoff; quote the x-request-id / apigw-requestid response header to support.
+support_contact: support@albacross.com

@@ -1,28 +1,182 @@
 aid: albacross
 name: Albacross
-description: Albacross is a company surfaced via the API Evangelist marketing integration graph — named
-  as an integration by 2 members of the programmable-marketing cohort — and added to the network as a
-  stub for full-pipeline profiling.
+description: Albacross is a Stockholm-founded B2B intent data and lead generation platform that identifies
+  anonymous website visitors by IP, enriches them with firmographic data, segments them by buying intent
+  using AI, and auto-engages high-intent prospects through email and LinkedIn sequences. For developers
+  it exposes a small, key-authenticated HTTP surface on api.albacross.com — a Reveal API that resolves an
+  IPv4 address to a company profile, an Enrich API that resolves a website domain to the same firmographic
+  record (name, country, registration number, address, LinkedIn URL, employee band, revenue band, NACE and
+  LinkedIn industry codes), and an n8n automation API for registering lead webhooks. Outbound webhooks
+  push identified-company leads into workflows in real time. The company publishes an OpenAPI 3.0.3
+  document for the Reveal API and an llms.txt at its website root.
 url: https://raw.githubusercontent.com/api-evangelist/albacross/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:marketing-integration-graph
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-12'
 modified: '2026-08-12'
+image: https://albacross.com/albacross-logo.png
 tags:
 - Company
-apis: []
+- B2B Data
+- Lead Generation
+- Intent Data
+- Company Enrichment
+- IP Intelligence
+- Firmographics
+- Marketing
+- Sales Intelligence
+- Account Based Marketing
+- Website Visitor Identification
+- Webhooks
+apis:
+- aid: albacross-reveal-api
+  name: Albacross Reveal API
+  description: Resolves an IPv4 address to a company profile — company name, country, registration number,
+    description, founded year, postal address, LinkedIn URL, employee-count band, revenue band, NACE code
+    and LinkedIn industry code. Returns 204 when a valid IP has no matching company. IPv6 is not supported.
+    Albacross publishes an OpenAPI 3.0.3 document for this API whose declared production server is
+    reveal.api.albacross.com; the current developer documentation on docs.albacross.com documents the same
+    capability at https://api.albacross.com/reveal/company/{ip_address}. Both hosts answer live and both
+    return the same 401 authentication envelope, so both are recorded here.
+  humanURL: https://docs.albacross.com/reveal
+  baseURL: https://api.albacross.com/reveal
+  tags:
+  - IP Intelligence
+  - Company Enrichment
+  - Firmographics
+  properties:
+  - type: OpenAPI
+    url: openapi/albacross-reveal-openapi.yml
+  - type: OpenAPI
+    name: Reveal API OpenAPI (as published by Albacross)
+    url: openapi/_original/albacross-reveal-openapi-original.yml
+  - type: Overlay
+    url: overlays/albacross-reveal-overlay.yaml
+  - type: APIReference
+    url: https://reveal.api.albacross.com/docs/index.html?url=/public/albacross_reveal_api.yml
+  - type: PostmanCollection
+    url: https://reveal.api.albacross.com/public/postman_collection.json
+- aid: albacross-enrich-api
+  name: Albacross Enrich API
+  description: Resolves a website domain to the same firmographic company record the Reveal API returns —
+    name, country, registration number, description, founded year, address, LinkedIn URL, employee band,
+    revenue band, NACE code and LinkedIn industry code. Authenticated with an Api-Key Authorization header.
+    Albacross documents this API on docs.albacross.com but publishes no OpenAPI document for it; the
+    catalog therefore carries no spec for this entry rather than an invented one.
+  humanURL: https://docs.albacross.com/enrich
+  baseURL: https://api.albacross.com/enrich
+  tags:
+  - Company Enrichment
+  - Firmographics
+  - B2B Data
+  properties:
+  - type: APIReference
+    url: https://docs.albacross.com/enrich
+- aid: albacross-n8n-api
+  name: Albacross n8n Automation API
+  description: The account-automation surface Albacross's own MIT-licensed n8n community node calls —
+    GET /n8n/me to verify a key, GET /n8n/segments and GET /n8n/buyer_personas to list account objects,
+    and POST/PATCH/DELETE /n8n/hooks to register, update and remove the lead webhook that receives
+    identified-company events. Documented by Albacross in the source of n8n-nodes-albacross rather than
+    in the developer portal; no OpenAPI is published for it.
+  humanURL: https://github.com/albacross/n8n-nodes-albacross
+  baseURL: https://api.albacross.com
+  tags:
+  - Webhooks
+  - Automation
+  - Lead Generation
+  properties:
+  - type: SourceCode
+    url: https://github.com/albacross/n8n-nodes-albacross
+  - type: Webhooks
+    url: asyncapi/albacross-webhooks.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/albacross-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/albacross-agentic-access.yml
 - type: Website
   url: https://albacross.com/
+- type: DeveloperPortal
+  url: https://docs.albacross.com/
+- type: Documentation
+  url: https://docs.albacross.com/
+- type: APIReference
+  url: https://docs.albacross.com/reveal
+- type: GettingStarted
+  url: https://docs.albacross.com/authentication
+- type: Authentication
+  url: authentication/albacross-authentication.yml
+- type: Support
+  url: https://help.albacross.com/
+- type: HelpCenter
+  url: https://help.albacross.com/
+- type: GitHubOrganization
+  url: https://github.com/albacross
+- type: Pricing
+  url: https://www.albacross.com/pricing
+- type: SignUp
+  url: https://www.albacross.com/register
+- type: Login
+  url: https://app.albacross.com/login
+- type: TermsOfService
+  url: https://www.albacross.com/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.albacross.com/privacy-policy
+- type: CookiePolicy
+  url: https://www.albacross.com/cookie-policy
+- type: Newsroom
+  url: https://www.albacross.com/newsroom
+- type: Integrations
+  url: https://integrations.albacross.com/
+- type: Postman
+  url: https://reveal.api.albacross.com/public/postman_collection.json
+- type: LLMsTxt
+  url: llms/albacross-llms.txt
+- type: Packages
+  url: packages/albacross-packages.yml
+- type: SDKs
+  url: packages/albacross-packages.yml
+- type: Plans
+  url: plans/albacross-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/albacross-rate-limits.yml
+- type: Conventions
+  url: conventions/albacross-conventions.yml
+- type: ErrorCatalog
+  url: errors/albacross-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/albacross-lifecycle.yml
+- type: DataModel
+  url: data-model/albacross-data-model.yml
+- type: Conformance
+  url: conformance/albacross-conformance.yml
+- type: Webhooks
+  url: asyncapi/albacross-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Components
+  url: components/albacross-components.yml
+- type: LinkedIn
+  url: https://www.linkedin.com/company/albacross
+- type: Twitter
+  url: https://twitter.com/albacrossnordic
+- type: Facebook
+  url: https://www.facebook.com/albacross
+- type: Careers
+  url: https://career.albacross.com/
 x-vouched-by:
 - Dreamdata
 - HockeyStack
 x-vouch-count: 2
+x-enrichment:
+  date: '2026-08-12'
+  status: enriched
+  artifacts_added: 24
+  pass: local-v1

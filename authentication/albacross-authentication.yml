@@ -1,0 +1,81 @@
+generated: '2026-08-12'
+method: searched
+source: https://docs.albacross.com/authentication
+docs: https://docs.albacross.com/authentication
+derived_from:
+- openapi/albacross-reveal-openapi.yml
+- https://github.com/albacross/n8n-nodes-albacross/blob/main/credentials/AlbacrossApi.credentials.ts
+- live probes of api.albacross.com and reveal.api.albacross.com on 2026-08-12
+summary:
+  types: [apiKey]
+  api_key_in: [header]
+  oauth2_flows: []
+  oidc: false
+  mtls: false
+  scopes: false
+note: >
+  One mechanism across the entire Albacross surface: a static, long-lived API key sent in the
+  Authorization header using a CUSTOM auth-scheme token, `Api-Key <key>`. This is not RFC 6750
+  Bearer and not RFC 7617 Basic. The published OpenAPI declares the scheme only as
+  `type: apiKey, in: header, name: Authorization` and OMITS the required `Api-Key ` prefix, so a
+  client generated from the spec alone will send the bare key and receive 401. The prefix is
+  visible only in the documentation code samples and in Albacross's own MIT-licensed n8n
+  credential. This artifact is upgraded to `method: searched` specifically to record that prefix,
+  which the derived spec pass could not see.
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: Authorization
+  value_format: 'Api-Key <YOUR_API_KEY>'
+  sources:
+  - openapi/albacross-reveal-openapi.yml
+  - openapi/_original/albacross-reveal-openapi-original.yml
+  applies_to:
+  - Albacross Reveal API
+  - Albacross Enrich API
+  - Albacross n8n Automation API
+  evidence:
+  - {source: 'https://docs.albacross.com/reveal', sample: 'curl -X GET "https://api.albacross.com/reveal/company/192.0.2.1" -H "Authorization: Api-Key YOUR_API_KEY"'}
+  - {source: 'https://docs.albacross.com/enrich', sample: 'GET https://api.albacross.com/enrich/companies/example.com / Authorization: Api-Key YOUR_API_KEY'}
+  - {source: 'github.com/albacross/n8n-nodes-albacross credentials/AlbacrossApi.credentials.ts', sample: "headers: { Authorization: '=Api-Key {{$credentials.apiKey}}' }"}
+key_provisioning:
+  self_serve: false
+  entitlement: Organisation plan; "API Access* — *Available upon request"
+  channels:
+  - Account manager / sales (https://www.albacross.com/data-api states keys are provisioned through sales)
+  - 'Albacross dashboard, for the n8n key: Settings → Integrations → n8n'
+  note: >
+    A developer cannot obtain an Albacross API key without a sales conversation. There is no
+    self-serve key issuance, no developer signup that yields a key, and no sandbox key.
+key_lifecycle:
+  rotation_documented: false
+  expiry: none
+  revocation_documented: false
+  multiple_keys: true
+  note: >
+    Keys are static and long-lived. No rotation policy, no expiry, no documented revocation flow
+    and no key-scoping. The n8n key is a separate named key, which implies per-integration keys are
+    possible, but no key-management documentation is published.
+scopes:
+  supported: false
+  note: >
+    No OAuth, therefore no scopes. scopes/ is deliberately absent from this repo rather than
+    written empty. Coarse entitlement is enforced per key at the endpoint level — an anonymous or
+    unentitled call to Enrich returns 403 "No authorization header" while Reveal returns 401
+    "Authentication required", so entitlement differences do surface, inconsistently.
+credential_transmission:
+  tls_required: true
+  observed_tls:
+  - {host: api.albacross.com, tls: TLSv1.2, hsts: false}
+  - {host: reveal.api.albacross.com, tls: TLSv1.2}
+  note: >
+    The API host negotiates TLS 1.2 and does not send HSTS, so a static long-lived bearer-style
+    credential travels to a host with no strict-transport guarantee. See
+    security/albacross-domain-security.yml.
+webhook_authentication:
+  inbound_to_consumer: shared-token
+  signature: none
+  note: >
+    Outbound webhooks use an optional shared token, not an HMAC signature. See
+    asyncapi/albacross-webhooks.yml.

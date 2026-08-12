@@ -1,0 +1,124 @@
+generated: '2026-08-12'
+method: searched
+source: https://www.albacross.com/pricing
+secondary_source: https://albacross.com/llms.txt
+plan_count: 3
+currency: EUR
+billing_periods: [monthly, annual]
+note: >
+  Prices below are the annual-billing (billed yearly) rate the pricing page shows by default;
+  the page advertises "Save 30%" on annual vs monthly. The metered unit is IDENTIFIED COMPANIES
+  PER MONTH, with verified email and verified phone credits as separate bundled allowances and
+  a published overage add-on table. API access is NOT a self-serve entitlement on any plan: the
+  pricing page marks "API Access*", "Webhooks*" and "Access to ABM*" as Organisation-tier
+  features "*Available upon request", and the /data-api page states API keys are provisioned
+  through the sales team. A developer cannot obtain an Albacross API key without talking to sales.
+free_trial:
+  available: true
+  days: 14
+  credit_card_required: false
+  url: https://www.albacross.com/register
+plans:
+- name: Starter
+  price: 59
+  currency: EUR
+  period: month
+  billing: annual
+  unit: per user
+  included:
+    identified_companies_per_month: 0-100
+    identified_companies_tiers: ['0-50', '50-100']
+    verified_email_credits: 10
+    verified_phone_credits: 5
+  features:
+  - AI Powered Automatic Email Sequences
+  - AI Powered Automatic LinkedIn Sequences
+  - AI Powered Buyer Persona Recommendations
+  - AI Powered Segmentation
+  - AI Powered Leads Insights
+  - LinkedIn Contact Finder (Chrome extension)
+  - Team Outreach Statistics
+  - Advanced Filters & Segments
+  - Slack & Teams Integration
+  - Pipedrive Integration
+  api_access: false
+  webhooks: false
+- name: Professional
+  price: 149
+  currency: EUR
+  period: month
+  billing: annual
+  unit: per user
+  most_popular: true
+  included:
+    identified_companies_per_month: 0-500
+    identified_companies_tiers: ['0-250', '251-500']
+    verified_email_credits: 25
+    verified_phone_credits: 10
+  features:
+  - Everything in Starter
+  - No sequences limit
+  - LinkedIn Ads integration
+  - Google Sheets Integration
+  - CSV Export
+  - Priority Support
+  - HubSpot Integration
+  api_access: false
+  webhooks: false
+- name: Organisation
+  price: null
+  price_note: '"Talk to Us" — quoted, not published. llms.txt states "from €375/user/month".'
+  currency: EUR
+  period: month
+  billing: annual
+  unit: per user
+  included:
+    identified_companies_per_month: 501-5000+
+    identified_companies_tiers: ['501-1000', '1000-2000', '2000-3000', '3000-4000', '4000-5000', '5000+']
+    verified_email_credits: 75
+    verified_phone_credits: 25
+  features:
+  - Everything in Professional
+  - User Roles & Permissions
+  - Salesforce Integration (Bi-Directional)
+  - App Security Settings
+  - Automatic CSV Export
+  - Dedicated success manager
+  api_access: true
+  api_access_note: '"API Access* — *Available upon request." IP-to-company data for enrichment and personalization.'
+  webhooks: true
+  webhooks_note: '"Webhooks* — *Available upon request." Send data directly into your application.'
+  abm_note: '"Access to ABM* — *Available upon request."'
+overage:
+  metered_units:
+  - unit: Verified Email Credits
+    note: Published add-on table; monthly and annual tiers with volume-declining unit price.
+    monthly_tiers:
+    - {credits: 100, cost_eur: 17.00, price_per_credit_eur: 0.17}
+    - {credits: 500, cost_eur: 68.00, price_per_credit_eur: 0.14}
+    - {credits: 1000, cost_eur: 119.00, price_per_credit_eur: 0.12}
+    - {credits: 3000, cost_eur: 331.50, price_per_credit_eur: 0.11}
+    annual_tiers:
+    - {credits: 1200, cost_eur: 960, price_per_credit_eur: 0.80}
+    - {credits: 12000, cost_eur: 3744, price_per_credit_eur: 0.31}
+    - {credits: 60000, cost_eur: 9600, price_per_credit_eur: 0.16}
+  - unit: Verified Phone Credits
+    monthly_tiers:
+    - {credits: 25, cost_eur: 14.25, price_per_credit_eur: 0.57}
+    - {credits: 100, cost_eur: 51.30, price_per_credit_eur: 0.51}
+    - {credits: 500, cost_eur: 185.25, price_per_credit_eur: 0.37}
+    - {credits: 2000, cost_eur: 741.00, price_per_credit_eur: 0.37}
+    annual_tiers:
+    - {credits: 1000, cost_eur: 300, price_per_credit_eur: 0.30}
+    - {credits: 30000, cost_eur: 9000, price_per_credit_eur: 0.30}
+    - {credits: 60000, cost_eur: 18000, price_per_credit_eur: 0.30}
+  note: Add-on credits are shared across the team and can be purchased after signup.
+api_pricing:
+  self_serve: false
+  published_per_call_price: null
+  note: >
+    No per-call or per-lookup price is published for the Reveal or Enrich APIs. The /data-api page
+    states the API is "Available via Organisation plan or as a standalone product", that API keys
+    are provisioned "through sales", and that "rate limits are customized based on use case and
+    expected volume". Enterprise pricing is quote-only.
+  source: https://www.albacross.com/data-api

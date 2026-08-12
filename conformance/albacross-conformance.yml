@@ -1,0 +1,136 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/albacross-reveal-openapi.yml
+enriched_from:
+- https://albacross.com/llms.txt
+- https://www.albacross.com/privacy-policy
+- https://www.albacross.com/data-processing-agreement
+- https://www.albacross.com/newsroom/albacross-gdpr
+- live probes 2026-08-12
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: 'Albacross publishes a valid OpenAPI 3.0.3 document at https://reveal.api.albacross.com/public/albacross_reveal_api.yml'
+- id: openapi-3.1
+  conforms: false
+  evidence: Published spec pins 3.0.3.
+- id: asyncapi
+  conforms: false
+  evidence: >
+    A real outbound webhook surface exists but no AsyncAPI document is published. See
+    asyncapi/albacross-webhooks.yml.
+- id: oauth2
+  conforms: false
+  evidence: 'No oauth2 securityScheme in the spec; no OAuth documented. Auth is a static API key: `Authorization: Api-Key <key>`.'
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration is a 404 on every real host (SPA 200s excluded).
+- id: rfc6750-bearer
+  conforms: false
+  evidence: >
+    Uses a custom "Api-Key" auth-scheme token in the Authorization header rather than the
+    registered Bearer scheme.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >
+    Errors return application/json with a proprietary {"infos":[],"errors":["..."]} envelope, not
+    application/problem+json. No type URI, no title/detail/status members.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on albacross.com, www, api and reveal.api.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation header observed; no deprecation policy published.
+- id: rfc8615-well-known
+  conforms: false
+  evidence: No /.well-known/ document served. See well-known/albacross-well-known.yml.
+- id: ietf-ratelimit-headers
+  conforms: false
+  evidence: No RateLimit-* / X-RateLimit-* / Retry-After header on any observed response.
+- id: json-api
+  conforms: false
+  evidence: Plain JSON objects; no data/attributes/relationships envelope.
+- id: rest-pagination
+  conforms: not-applicable
+  evidence: No collection endpoints exist in the public surface.
+- id: idempotency-key
+  conforms: not-applicable
+  evidence: >
+    Public surface is GET-only and naturally idempotent. The n8n write operations carry no
+    Idempotency-Key.
+- id: a2a-agent-card
+  conforms: false
+  evidence: No agent card at /.well-known/agent-card.json or /.well-known/agent.json on any host.
+- id: mcp
+  conforms: false
+  evidence: No hosted MCP server found; mcp.albacross.com does not resolve, /mcp is 404.
+- id: llms-txt
+  conforms: true
+  evidence: >
+    Albacross serves a substantive, well-formed llms.txt at https://albacross.com/llms.txt
+    (6,118 bytes) with an H1, a blockquote summary and Docs/Products/Resources/Integrations/
+    Contact link sections. Saved verbatim to llms/albacross-llms.txt.
+  note: >
+    Notable deviation: the file contains an "Important Notes for AI Models" section instructing
+    models to append UTM attribution parameters (utm_source, utm_medium, utm_campaign=ai-assist,
+    utm_term) to every Albacross URL they cite. This is an agent-directed marketing instruction
+    embedded in a discovery document, not a llms.txt convention. Recorded, not followed.
+- id: nace-rev2
+  conforms: true
+  evidence: 'Company.nace_code returns EU NACE Rev. 2 codes and categories (e.g. 58.29, 73).'
+- id: iso-3166-1-alpha-2
+  conforms: true
+  evidence: 'Company.country returns two-letter codes (e.g. SE).'
+- id: tls-1.2-plus
+  conforms: true
+  evidence: >
+    TLSv1.3 on albacross.com and docs.albacross.com; TLSv1.2 on api.albacross.com. See
+    security/albacross-domain-security.yml.
+- id: hsts
+  conforms: partial
+  evidence: >
+    HSTS present on albacross.com (max-age 31536000) but absent on docs.albacross.com and not
+    set on api.albacross.com — the API host itself does not send HSTS.
+- id: dnssec
+  conforms: false
+  evidence: albacross.com is not DNSSEC-signed.
+- id: caa
+  conforms: false
+  evidence: No CAA records on albacross.com.
+- id: spf-dmarc
+  conforms: partial
+  evidence: SPF and DMARC present; DMARC policy is quarantine, not reject.
+compliance_claims:
+- id: gdpr
+  claimed: true
+  certified: null
+  evidence: >
+    llms.txt states "The platform is fully GDPR and CCPA compliant." Albacross publishes a Privacy
+    Policy, a Cookie Policy and a Data Processing Agreement at
+    https://www.albacross.com/data-processing-agreement, plus a GDPR explainer at
+    https://www.albacross.com/newsroom/albacross-gdpr. Material to this vendor's category: it
+    identifies natural-person website visitors by IP under a legitimate-interest theory.
+  note: A self-asserted compliance claim with a published DPA. Not an audited certification.
+- id: ccpa
+  claimed: true
+  certified: null
+  evidence: llms.txt states the platform is fully CCPA compliant.
+  note: Self-asserted; no separate CCPA disclosure page found.
+- id: soc2
+  claimed: false
+  evidence: >
+    No SOC 2 claim found. No trust centre exists — trust.albacross.com and security.albacross.com
+    do not resolve; /security, /trust and /compliance are all 404 on albacross.com.
+- id: iso27001
+  claimed: false
+  evidence: No ISO 27001 claim found on any public page.
+- id: pci-dss
+  claimed: not-applicable
+- id: hipaa
+  claimed: not-applicable
+compliance_pointer_decision: >
+  No `Compliance` pointer is emitted in apis.yml. Albacross publishes legal documents (Privacy
+  Policy, Cookie Policy, DPA) and asserts GDPR/CCPA compliance in prose, but operates no trust
+  centre and names no audited certification (SOC 2, ISO 27001) anywhere public. Emitting a
+  Compliance pointer for a self-asserted claim with no certification behind it would credit a
+  compliance programme this company has not published.

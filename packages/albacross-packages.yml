@@ -1,0 +1,75 @@
+generated: '2026-08-12'
+method: searched
+source: https://www.npmjs.com/package/n8n-nodes-albacross
+note: >
+  Albacross ships no conventional server-side client SDK in any language. Searched npm, PyPI,
+  RubyGems, Packagist, crates.io, pkg.go.dev, NuGet and Maven Central for first-party Albacross
+  client libraries; the only first-party published package is the n8n community node, which is
+  built and released from the company's own GitHub organisation (github.com/albacross) under MIT.
+  PyPI has no `albacross` project (404). The Reveal and Enrich APIs are single-GET, key-authenticated
+  endpoints that Albacross documents with raw cURL/Python/JavaScript snippets instead of an SDK.
+packages:
+- language: typescript
+  registry: npm
+  name: n8n-nodes-albacross
+  url: https://www.npmjs.com/package/n8n-nodes-albacross
+  install: npm install n8n-nodes-albacross
+  official: true
+  version: 0.1.1
+  published: '2026-05-21'
+  license: MIT
+  repository: https://github.com/albacross/n8n-nodes-albacross
+  description: >
+    n8n community node package. Ships an Albacross API credential (Api-Key header, verified against
+    GET /n8n/me) and an Albacross Trigger node that registers a lead webhook with Albacross on
+    workflow activation and receives identified-company lead events in real time.
+  note: >
+    Actively maintained — 0.1.1 published 2026-05-21, repository last pushed 2026-06-04. Two
+    published versions (0.1.0, 0.1.1). This is the newest artifact in the Albacross developer
+    surface and is more current than the Reveal API OpenAPI, which still carries version '1.0'.
+registries_checked:
+- {registry: npm, result: 1 first-party package}
+- {registry: pypi, result: no albacross project (404)}
+- {registry: rubygems, result: none}
+- {registry: packagist, result: none}
+- {registry: crates.io, result: none}
+- {registry: nuget, result: none}
+- {registry: maven-central, result: none}
+- {registry: pkg.go.dev, result: none}
+non_package_distributions:
+- name: Albacross tracking script
+  registry: cdn
+  url: https://serve.albacross.com/track.js
+  official: true
+  version: null
+  published: null
+  note: >
+    Unpinned CDN script tag — the loader URL carries no version segment and floats to whatever
+    Albacross has deployed, so a consumer cannot tell which build they are running. Served
+    200 as application/javascript on 2026-08-12. No jsDelivr/unpkg mirror exists (not an npm
+    package), so there is no metadata endpoint to read a version from.
+- name: Google Tag Manager template — Reveal Script
+  registry: github
+  url: https://github.com/albacross/gtm-reveal
+  official: true
+  version: null
+  published: '2020-06-01'
+  note: >
+    Distributed as a GTM custom template (template.tpl + metadata.yaml), not a package registry
+    artifact, so there is no version to read. Last pushed 2020-06-01 — dormant for six years.
+- name: Google Tag Manager template — Tracking Script
+  registry: github
+  url: https://github.com/albacross/gtm-tracking
+  official: true
+  version: null
+  published: '2020-06-01'
+  note: GTM custom template. Last pushed 2020-06-01 — dormant for six years.
+- name: Joomla plugin
+  registry: github
+  url: https://github.com/albacross/joomla_plugin
+  official: true
+  version: null
+  published: '2018-07-05'
+  note: >
+    PHP Joomla plugin, never published to Packagist. Last pushed 2018-07-05 — eight years
+    stale and the strongest abandonment signal in the Albacross open-source surface.
