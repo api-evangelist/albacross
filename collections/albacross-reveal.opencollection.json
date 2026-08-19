@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Reveal API docs",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Retrieve company based on its IPv4 address",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://reveal.api.albacross.com/company/:ip_v4",
+        "params": [
+          {
+            "name": "ip_v4",
+            "value": "",
+            "type": "path",
+            "description": "Company IPv4 address"
+          }
+        ]
+      },
+      "docs": "Retrieve company based on its IPv4 address"
+    }
+  ],
+  "bundled": true
+}
