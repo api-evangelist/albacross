@@ -28,6 +28,19 @@ tags:
 - Sales Intelligence
 - Account Based Marketing
 - Website Visitor Identification
+- Webhook
+tags_raw:
+- Company
+- B2B Data
+- Lead Generation
+- Intent Data
+- Company Enrichment
+- IP Intelligence
+- Firmographics
+- Marketing
+- Sales Intelligence
+- Account Based Marketing
+- Website Visitor Identification
 - Webhooks
 apis:
 - aid: albacross-reveal-api
@@ -83,6 +96,10 @@ apis:
   humanURL: https://github.com/albacross/n8n-nodes-albacross
   baseURL: https://api.albacross.com
   tags:
+  - Webhook
+  - Automation
+  - Lead Generation
+  tags_raw:
   - Webhooks
   - Automation
   - Lead Generation
