@@ -43,40 +43,14 @@ tags_raw:
 - Website Visitor Identification
 - Webhooks
 apis:
-- aid: albacross-reveal-api
-  name: Albacross Reveal API
-  description: Resolves an IPv4 address to a company profile — company name, country, registration number,
-    description, founded year, postal address, LinkedIn URL, employee-count band, revenue band, NACE code
-    and LinkedIn industry code. Returns 204 when a valid IP has no matching company. IPv6 is not supported.
-    Albacross publishes an OpenAPI 3.0.3 document for this API whose declared production server is
-    reveal.api.albacross.com; the current developer documentation on docs.albacross.com documents the same
-    capability at https://api.albacross.com/reveal/company/{ip_address}. Both hosts answer live and both
-    return the same 401 authentication envelope, so both are recorded here.
-  humanURL: https://docs.albacross.com/reveal
-  baseURL: https://api.albacross.com/reveal
-  tags:
-  - IP Intelligence
-  - Company Enrichment
-  - Firmographics
-  properties:
-  - type: OpenAPI
-    url: openapi/albacross-reveal-openapi.yml
-  - type: OpenAPI
-    name: Reveal API OpenAPI (as published by Albacross)
-    url: openapi/_original/albacross-reveal-openapi-original.yml
-  - type: Overlay
-    url: overlays/albacross-reveal-overlay.yaml
-  - type: APIReference
-    url: https://reveal.api.albacross.com/docs/index.html?url=/public/albacross_reveal_api.yml
-  - type: PostmanCollection
-    url: https://reveal.api.albacross.com/public/postman_collection.json
 - aid: albacross-enrich-api
   name: Albacross Enrich API
-  description: Resolves a website domain to the same firmographic company record the Reveal API returns —
-    name, country, registration number, description, founded year, address, LinkedIn URL, employee band,
-    revenue band, NACE code and LinkedIn industry code. Authenticated with an Api-Key Authorization header.
-    Albacross documents this API on docs.albacross.com but publishes no OpenAPI document for it; the
-    catalog therefore carries no spec for this entry rather than an invented one.
+  description: >-
+    Resolves a website domain to the same firmographic company record the Reveal API returns — name, country,
+    registration number, description, founded year, address, LinkedIn URL, employee band, revenue band,
+    NACE code and LinkedIn industry code. Authenticated with an Api-Key Authorization header. Albacross
+    documents this API on docs.albacross.com but publishes no OpenAPI document for it; the catalog therefore
+    carries no spec for this entry rather than an invented one.
   humanURL: https://docs.albacross.com/enrich
   baseURL: https://api.albacross.com/enrich
   tags:
@@ -88,11 +62,12 @@ apis:
     url: https://docs.albacross.com/enrich
 - aid: albacross-n8n-api
   name: Albacross n8n Automation API
-  description: The account-automation surface Albacross's own MIT-licensed n8n community node calls —
-    GET /n8n/me to verify a key, GET /n8n/segments and GET /n8n/buyer_personas to list account objects,
-    and POST/PATCH/DELETE /n8n/hooks to register, update and remove the lead webhook that receives
-    identified-company events. Documented by Albacross in the source of n8n-nodes-albacross rather than
-    in the developer portal; no OpenAPI is published for it.
+  description: >-
+    The account-automation surface Albacross's own MIT-licensed n8n community node calls — GET /n8n/me
+    to verify a key, GET /n8n/segments and GET /n8n/buyer_personas to list account objects, and POST/PATCH/DELETE
+    /n8n/hooks to register, update and remove the lead webhook that receives identified-company events.
+    Documented by Albacross in the source of n8n-nodes-albacross rather than in the developer portal;
+    no OpenAPI is published for it.
   humanURL: https://github.com/albacross/n8n-nodes-albacross
   baseURL: https://api.albacross.com
   tags:
@@ -108,12 +83,28 @@ apis:
     url: https://github.com/albacross/n8n-nodes-albacross
   - type: Webhooks
     url: asyncapi/albacross-webhooks.yml
+- aid: albacross:albacross-company-api
+  name: Albacross Company API
+  description: The Company API from Albacross — 1 operation(s) for company.
+  humanURL: https://docs.albacross.com/reveal
+  baseURL: https://api.albacross.com/reveal
+  tags:
+  - Company
+  properties:
+  - type: OpenAPI
+    url: openapi/albacross-company-api-openapi.yml
+  - type: APIReference
+    url: https://reveal.api.albacross.com/docs/index.html?url=/public/albacross_reveal_api.yml
+  - type: PostmanCollection
+    url: https://reveal.api.albacross.com/public/postman_collection.json
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/albacross-reveal-overlay.yaml
 - type: DomainSecurity
   url: security/albacross-domain-security.yml
 - type: AgenticAccess
