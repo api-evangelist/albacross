@@ -12,6 +12,19 @@ description: Albacross is a Stockholm-founded B2B intent data and lead generatio
 url: https://raw.githubusercontent.com/api-evangelist/albacross/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:marketing-integration-graph
+deliveryModel:
+  model: unknown
+  open_source: unknown
+  commercial: true
+  callable_host: true
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - openapi
+  - pricing
+  - repository-unlicensed
+  generated: '2026-08-28'
+  method: derived
 specificationVersion: '0.23'
 created: '2026-08-12'
 modified: '2026-08-12'
