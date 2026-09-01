@@ -116,6 +116,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: License
+  name: MIT
+  url: https://github.com/albacross/n8n-nodes-albacross/blob/main/LICENSE
 - type: Overlay
   url: overlays/albacross-reveal-overlay.yaml
 - type: DomainSecurity
