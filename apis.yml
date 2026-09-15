@@ -3,12 +3,12 @@ name: Albacross
 description: Albacross is a Stockholm-founded B2B intent data and lead generation platform that identifies
   anonymous website visitors by IP, enriches them with firmographic data, segments them by buying intent
   using AI, and auto-engages high-intent prospects through email and LinkedIn sequences. For developers
-  it exposes a small, key-authenticated HTTP surface on api.albacross.com — a Reveal API that resolves an
-  IPv4 address to a company profile, an Enrich API that resolves a website domain to the same firmographic
-  record (name, country, registration number, address, LinkedIn URL, employee band, revenue band, NACE and
-  LinkedIn industry codes), and an n8n automation API for registering lead webhooks. Outbound webhooks
-  push identified-company leads into workflows in real time. The company publishes an OpenAPI 3.0.3
-  document for the Reveal API and an llms.txt at its website root.
+  it exposes a small, key-authenticated HTTP surface on api.albacross.com — a Reveal API that resolves
+  an IPv4 address to a company profile, an Enrich API that resolves a website domain to the same firmographic
+  record (name, country, registration number, address, LinkedIn URL, employee band, revenue band, NACE
+  and LinkedIn industry codes), and an n8n automation API for registering lead webhooks. Outbound webhooks
+  push identified-company leads into workflows in real time. The company publishes an OpenAPI 3.0.3 document
+  for the Reveal API and an llms.txt at its website root.
 url: https://raw.githubusercontent.com/api-evangelist/albacross/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:marketing-integration-graph
@@ -71,14 +71,13 @@ tags_raw:
 - Website Visitor Identification
 - Webhooks
 apis:
-- aid: albacross-enrich-api
+- aid: albacross:albacross-enrich-api
   name: Albacross Enrich API
-  description: >-
-    Resolves a website domain to the same firmographic company record the Reveal API returns — name, country,
-    registration number, description, founded year, address, LinkedIn URL, employee band, revenue band,
-    NACE code and LinkedIn industry code. Authenticated with an Api-Key Authorization header. Albacross
-    documents this API on docs.albacross.com but publishes no OpenAPI document for it; the catalog therefore
-    carries no spec for this entry rather than an invented one.
+  description: Resolves a website domain to the same firmographic company record the Reveal API returns
+    — name, country, registration number, description, founded year, address, LinkedIn URL, employee band,
+    revenue band, NACE code and LinkedIn industry code. Authenticated with an Api-Key Authorization header.
+    Albacross documents this API on docs.albacross.com but publishes no OpenAPI document for it; the catalog
+    therefore carries no spec for this entry rather than an invented one.
   humanURL: https://docs.albacross.com/enrich
   baseURL: https://api.albacross.com/enrich
   tags:
@@ -88,14 +87,13 @@ apis:
   properties:
   - type: APIReference
     url: https://docs.albacross.com/enrich
-- aid: albacross-n8n-api
+- aid: albacross:albacross-n8n-api
   name: Albacross n8n Automation API
-  description: >-
-    The account-automation surface Albacross's own MIT-licensed n8n community node calls — GET /n8n/me
-    to verify a key, GET /n8n/segments and GET /n8n/buyer_personas to list account objects, and POST/PATCH/DELETE
-    /n8n/hooks to register, update and remove the lead webhook that receives identified-company events.
-    Documented by Albacross in the source of n8n-nodes-albacross rather than in the developer portal;
-    no OpenAPI is published for it.
+  description: The account-automation surface Albacross's own MIT-licensed n8n community node calls —
+    GET /n8n/me to verify a key, GET /n8n/segments and GET /n8n/buyer_personas to list account objects,
+    and POST/PATCH/DELETE /n8n/hooks to register, update and remove the lead webhook that receives identified-company
+    events. Documented by Albacross in the source of n8n-nodes-albacross rather than in the developer
+    portal; no OpenAPI is published for it.
   humanURL: https://github.com/albacross/n8n-nodes-albacross
   baseURL: https://api.albacross.com
   tags:
