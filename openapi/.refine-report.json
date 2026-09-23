@@ -1,0 +1,24 @@
+{
+  "provider": "albacross",
+  "sources": [
+    "_original/albacross-reveal-openapi-original.yml"
+  ],
+  "outputs": [
+    "albacross-company-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "albacross-reveal-openapi-original.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "albacross-reveal-openapi-original.yml: tagged paths GET /company/{ip_v4} -> Company",
+    "albacross-reveal-openapi-original.yml: declared missing tag: Company",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/albacross-reveal-openapi.yml: archived document superseded by a larger archived document",
+    "albacross-company-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
