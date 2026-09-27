@@ -65,16 +65,16 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ErrorMessageUnsupportedIPv6:
-      description: 'Unsupported IPv6 format - only decimal IPv4 format is supported. Ex: 23.45.67.89'
+    ErrorMessageWrongFormat:
+      description: 'Wrong IP format - only decimal IPv4 format is supported. Ex: 23.45.67.89'
       type: object
       properties:
         message:
           type: string
       required:
       - message
-    ErrorMessageWrongFormat:
-      description: 'Wrong IP format - only decimal IPv4 format is supported. Ex: 23.45.67.89'
+    ErrorMessageUnsupportedIPv6:
+      description: 'Unsupported IPv6 format - only decimal IPv4 format is supported. Ex: 23.45.67.89'
       type: object
       properties:
         message:
