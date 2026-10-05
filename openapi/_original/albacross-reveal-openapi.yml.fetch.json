@@ -1,0 +1,12 @@
+{
+ "url": "https://reveal.api.albacross.com/public/albacross_reveal_api.yml",
+ "requested_url": "https://reveal.api.albacross.com/public/albacross_reveal_api.yml",
+ "status": 200,
+ "content_type": "application/octet-stream",
+ "bytes": 3928,
+ "sha256": "e486726d0d994a2bc9c0ee182f7f744082366e12ffc1053805ac6fd70f9330c6",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
