@@ -122,3 +122,36 @@ api_pricing:
     are provisioned "through sales", and that "rate limits are customized based on use case and
     expected volume". Enterprise pricing is quote-only.
   source: https://www.albacross.com/data-api
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - negotiated
+  - seat
+  units:
+  - seat
+  plans:
+  - name: Starter
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Professional
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Organisation
+    access: other
+    model: negotiated
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
