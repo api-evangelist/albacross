@@ -1,0 +1,91 @@
+openapi: 3.2.0
+info:
+  title: Reveal API docs Company API
+  description: Reveal API allows you to get detailed information about a company based on one of its IPv4 addresses.
+  version: '1.0'
+servers:
+- url: https://reveal.api.albacross.com
+  description: Production data
+- url: https://reveal.api.albakaos.com
+  description: Staging data
+security:
+- ApiKeyAuth: []
+tags:
+- name: Company
+paths:
+  /company/{ip_v4}:
+    get:
+      summary: Retrieve company based on its IPv4 address
+      parameters:
+      - name: ip_v4
+        in: path
+        description: Company IPv4 address
+        required: true
+        schema:
+          type: string
+          format: ipv4
+      responses:
+        200:
+          description: Company details
+          content:
+            application/json:
+              schema:
+                $ref: swagger-ui/common_components.yml#/components/schemas/Company
+        204:
+          description: Company not found for given IP
+        400:
+          description: Wrong/unsupported IP format
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ErrorMessageWrongFormat'
+                - $ref: '#/components/schemas/ErrorMessageUnsupportedIPv6'
+        401:
+          description: Invalid API Key
+          content:
+            application/json:
+              schema:
+                $ref: swagger-ui/common_components.yml#/components/schemas/ErrorMessage
+        429:
+          description: '''Requests quota''/''Identfied quota'' has been exceeded - please contact Albacross'
+          content:
+            application/json:
+              schema:
+                $ref: swagger-ui/common_components.yml#/components/schemas/ErrorMessage
+        500:
+          description: Unknown error has appeared - please contact Albacross
+          content:
+            application/json:
+              schema:
+                $ref: swagger-ui/common_components.yml#/components/schemas/ErrorMessage
+      tags:
+      - Company
+      operationId: getCompanyByIpV4
+      x-operation-id-source: derived
+components:
+  schemas:
+    ErrorMessageWrongFormat:
+      description: 'Wrong IP format - only decimal IPv4 format is supported. Ex: 23.45.67.89'
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+      - message
+    ErrorMessageUnsupportedIPv6:
+      description: 'Unsupported IPv6 format - only decimal IPv4 format is supported. Ex: 23.45.67.89'
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+      - message
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+externalDocs:
+  url: /public/postman_collection.json
+  description: Download preconfigured Postman collection

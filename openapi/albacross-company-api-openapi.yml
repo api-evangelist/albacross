@@ -1,7 +1,24 @@
 openapi: 3.2.0
 info:
   title: Reveal API docs Company API
-  description: Reveal API allows you to get detailed information about a company based on one of its IPv4 addresses.
+  description: 'Reveal API allows you to get detailed information about a company based on one of its IPv4 or IPv6 addresses.
+
+
+    Information may contain details like: a company name, address, URL, number of employees and many more.
+
+    All of it is presented in a JSON format - a readable, self-explanatory and widely adopted industry standard.
+
+
+    Our automated algorithms and multiple data sources continuously work on improving the quality of our data
+
+    by making sure that available information is as detailed and as up-to-date as possible.
+
+    At the same time every day, we''re increasing the range of covered addresses out of the existing IP address pool.
+
+
+    If, however, you are not able to find a company for a given IP or another error occurs (not likely, but possible),
+
+    our API will provide you with a detailed, standardised error message and an appropriate HTTP return status code.'
   version: '1.0'
 servers:
 - url: https://reveal.api.albacross.com
@@ -13,17 +30,16 @@ security:
 tags:
 - name: Company
 paths:
-  /company/{ip_v4}:
+  /company/{ip}:
     get:
-      summary: Retrieve company based on its IPv4 address
+      summary: Retrieve company based on its IPv4 or IPv6 address
       parameters:
-      - name: ip_v4
+      - name: ip
         in: path
-        description: Company IPv4 address
+        description: Company IPv4 (e.g. 23.45.67.89) or IPv6 (e.g. 2001:db8::1) address
         required: true
         schema:
           type: string
-          format: ipv4
       responses:
         200:
           description: Company details
@@ -34,13 +50,11 @@ paths:
         204:
           description: Company not found for given IP
         400:
-          description: Wrong/unsupported IP format
+          description: Wrong IP format
           content:
             application/json:
               schema:
-                oneOf:
-                - $ref: '#/components/schemas/ErrorMessageWrongFormat'
-                - $ref: '#/components/schemas/ErrorMessageUnsupportedIPv6'
+                $ref: '#/components/schemas/ErrorMessageWrongFormat'
         401:
           description: Invalid API Key
           content:
@@ -61,20 +75,12 @@ paths:
                 $ref: swagger-ui/common_components.yml#/components/schemas/ErrorMessage
       tags:
       - Company
-      operationId: getCompanyByIpV4
+      operationId: getCompanyByIp
       x-operation-id-source: derived
 components:
   schemas:
     ErrorMessageWrongFormat:
-      description: 'Wrong IP format - only decimal IPv4 format is supported. Ex: 23.45.67.89'
-      type: object
-      properties:
-        message:
-          type: string
-      required:
-      - message
-    ErrorMessageUnsupportedIPv6:
-      description: 'Unsupported IPv6 format - only decimal IPv4 format is supported. Ex: 23.45.67.89'
+      description: 'Wrong IP format - provide an IPv4 or IPv6 address. Ex: 23.45.67.89 or 2001:db8::1'
       type: object
       properties:
         message:
