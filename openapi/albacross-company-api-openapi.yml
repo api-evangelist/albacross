@@ -95,3 +95,9 @@ components:
 externalDocs:
   url: /public/postman_collection.json
   description: Download preconfigured Postman collection
+x-provenance:
+  method: harvested
+  publisher: Albacross
+  source: https://reveal.api.albacross.com/public/albacross_reveal_api.yml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
