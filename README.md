@@ -64,5 +64,139 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Identify Website Visitors, Decision Makers, and Auto is a company surfaced via the API Evangelist harvest backlog (source: marketing-integration-graph) and added to the network as a stub for full-pipeline profiling.
-- https://albacross.com/
+Albacross is a Stockholm-founded B2B intent data and lead generation platform that identifies anonymous website visitors by IP, enriches them with firmographic data, segments them by buying intent using AI, and auto-engages high-intent prospects through email and LinkedIn sequences. For developers it exposes a small, key-authenticated HTTP surface on api.albacross.com — a Reveal API that resolves an IPv4 address to a company profile, an Enrich API that resolves a website domain to the same firmographic record (name, country, registration number, address, LinkedIn URL, employee band, revenue band, NACE and LinkedIn industry codes), and an n8n automation API for registering lead webhooks. Outbound webhooks push identified-company leads into workflows in real time. The company publishes an OpenAPI 3.0.3 document for the Reveal API and an llms.txt at its website root.
+
+**Areas:** Company · B2B Data · Lead Generation · Intent Data · Company Enrichment · IP Intelligence · Firmographics · Marketing · Sales Intelligence · Account Based Marketing · Website Visitor Identification · Webhook
+
+## Albacross on APIs.io
+
+Everything profiled for Albacross is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/albacross/](https://apis.io/providers/albacross/)** — or go straight to one of the APIs or properties below.
+
+### APIs (3)
+
+- [Albacross Enrich API](https://apis.io/apis/albacross/albacross-enrich-api/) — Resolves a website domain to the same firmographic company record the Reveal API returns — name, country, registration number, description, founded year,…
+- [Albacross n8n Automation API](https://apis.io/apis/albacross/albacross-n8n-api/) — The account-automation surface Albacross's own MIT-licensed n8n community node calls — GET /n8n/me to verify a key, GET /n8n/segments and GET…
+- [Albacross Company API](https://apis.io/apis/albacross/albacross-company-api/) — The Company API from Albacross — 1 operation(s) for company.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Albacross Webhooks](https://apis.io/asyncapis/albacross/albacross-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [albacross](https://apis.io/servers/albacross/albacross/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Albacross Agentic Access](https://apis.io/agentic-access/albacross/albacross-agentic-access/)
+
+#### Collections (1)
+
+Postman and Open Collection request collections.
+
+- [Reveal API docs](https://apis.io/collections/albacross/open-albacross-reveal/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Albacross Reveal Overlay](https://apis.io/overlays/albacross/albacross-reveal-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Albacross Authentication](https://apis.io/security/albacross/albacross-authentication/)
+- [Albacross Domain Security](https://apis.io/security/albacross/albacross-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Albacross Plans Pricing](https://apis.io/plans/albacross/albacross-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Albacross Rate Limits](https://apis.io/rate-limits/albacross/albacross-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://albacross.com/)
+- [Documentation](https://docs.albacross.com/)
+- [Getting started](https://docs.albacross.com/authentication)
+- [API reference](https://docs.albacross.com/reveal)
+- [Pricing](https://www.albacross.com/pricing)
+- [Sign up](https://www.albacross.com/register)
+- [Support](https://help.albacross.com/)
+- [Terms of service](https://www.albacross.com/terms-of-service)
+- [Privacy policy](https://www.albacross.com/privacy-policy)
+- [GitHub](https://github.com/albacross)
+
+## API Evangelist rating
+
+**Kin Score 44.4** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 74.1 |
+| Contract quality | 43.7 |
+| Contract governance | 4.5 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 37.5 |
+| Access clarity | 76.3 |
+
+**Agent readiness 35.6** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | na |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | na |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | na |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/albacross/](https://apis.io/providers/albacross/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Albacross: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/albacross/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
